@@ -1,210 +1,189 @@
-# fits-api
+# 🎯 FITS-API · Fast Implemented TikTok Scraper API
 
-[![npm version](https://badge.fury.io/js/fits-api.svg)](https://www.npmjs.com/package/fits-api)  
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![npm version](https://badge.fury.io/js/fits-api.svg)](https://www.npmjs.com/package/fits-api)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-**fits-api** (Fast Implemented TikTok Scraper API) is an unofficial Node.js SDK that retrieves public TikTok data using scraping techniques and dynamic signature generation with Playwright.
+> ⚠️ **Private SDK** · This package is not open-source and is intended for internal/private use only.
 
-> Developed with ❤️ by [KinglyShade](https://github.com/kinglyfenixstudios) for educational and research purposes.
+**FITS-API** is an advanced, unofficial Node.js SDK for scraping **public TikTok data** using dynamic signature generation via Playwright (Chromium). It's designed for high-reliability environments like dashboards, reporting tools, or analytics platforms.
 
 ---
 
-## Installation
-
-To install and set up the API, follow these steps:
-
-1. Install the project dependencies:
+## 📦 Installation
 
 ```bash
 npm install fits-api
+npx playwright install chromium
 ````
 
-2. Install the Chromium browser via Playwright:
-
-```bash
-npx playwright install chromium
-```
-
-> **Requirements**: Node.js version 16 or higher and an internet connection to access TikTok.
+> ✅ Requires **Node.js v18+** and internet access to reach TikTok and load the required dynamic signature environment.
 
 ---
 
-## Features
+## ✨ Features
 
-* Retrieve public videos from any TikTok user.
-* Filter results by hashtags or keywords.
-* Extract video statistics: views, likes, comments, shares.
-* Retrieve metadata of the audio used in videos.
-* Dynamic signature generation to bypass basic bot protection.
+* 📹 Fetch public videos from any TikTok profile.
+* 👤 Retrieve basic public profile data.
+* 🔐 Automatic signature generation using embedded Chromium.
+* 🚧 Graceful fallback for invalid or inaccessible users (returns empty data instead of crashing).
+* 🧪 Includes working Jest tests for key SDK behaviors.
 
 ---
 
-## Basic Usage
+## 🚀 Quick Start
 
-### Method: `getUserVideos(username: string, options?: { filter?: string[] })`
-
-This function allows you to retrieve public videos of a specific TikTok user.
+### 🔹 Get User Videos
 
 ```ts
 import { getUserVideos } from 'fits-api';
 
-(async () => {
-  const videos = await getUserVideos('example_username', {
-    filter: ['fyp', 'humor']  // Optional keyword filter
-  });
+const videos = await getUserVideos('tiktok', {
+  limit: 3
+});
 
-  console.log(videos);
-})();
+console.log(videos);
 ```
 
-### Example Response
+Returns an array of video metadata or an empty array if the user is not found.
 
-```json
-[
-  {
-    "id": "1234567890",
-    "description": "This is a sample video #humor",
-    "playCount": 10000,
-    "likeCount": 5000,
-    "commentCount": 200,
-    "shareCount": 100,
-    "hashtags": ["#humor"],
-    "audio": {
-      "id": "987",
-      "title": "Viral Song",
-      "videoCount": 4321
-    }
-  }
-]
-```
-
----
-
-## Additional Examples
-
-### Get User Profile Information
-
-You can also retrieve information about the user's profile, such as followers, following, and bio.
+### 🔹 Get User Profile
 
 ```ts
 import { getUserProfile } from 'fits-api';
 
-(async () => {
-  const profile = await getUserProfile('example_username');
-  console.log(profile);
-})();
+const profile = await getUserProfile('tiktok');
+
+console.log(profile);
 ```
 
-### Example Response for User Profile
-
-```json
-{
-  "username": "example_username",
-  "followersCount": 1500,
-  "followingCount": 200,
-  "bio": "This is the bio of the user.",
-  "profilePicture": "https://path-to-profile-picture.jpg"
-}
-```
-
-### Get Trending Hashtags
-
-You can retrieve a list of currently trending hashtags on TikTok.
-
-```ts
-import { getTrendingHashtags } from 'fits-api';
-
-(async () => {
-  const trendingHashtags = await getTrendingHashtags();
-  console.log(trendingHashtags);
-})();
-```
-
-### Example Response for Trending Hashtags
-
-```json
-[
-  "#fyp",
-  "#viral",
-  "#funny",
-  "#dance",
-  "#trending"
-]
-```
-
-### Get Video Comments
-
-Retrieve the comments of a specific video by its ID.
-
-```ts
-import { getVideoComments } from 'fits-api';
-
-(async () => {
-  const comments = await getVideoComments('1234567890');
-  console.log(comments);
-})();
-```
-
-### Example Response for Video Comments
-
-```json
-[
-  {
-    "user": "user1",
-    "comment": "This is hilarious!",
-    "likeCount": 120
-  },
-  {
-    "user": "user2",
-    "comment": "Love this content!",
-    "likeCount": 80
-  }
-]
-```
+Returns the profile's public metadata (or `null` if not found).
 
 ---
 
-## Technical Requirements
+## 🧪 Example Test Output
 
-* **Node.js** version 16 or higher.
-* Project dependencies installed (`npm install`).
-* Chromium browser installed via Playwright:
+This package includes Jest-based tests:
 
-  ```bash
-  npx playwright install chromium
-  ```
+```bash
+npm run tests
+```
 
----
+Sample output:
 
-## Best Practices
+```
+PASS  src/__tests__/user.test.ts
+  getUserVideos
+    ✓ should fetch user videos with valid username
+    ✓ should return empty array for non-existent username
+```
 
-* Use keyword filters to reduce unnecessary requests.
-* Avoid large-scale scraping or automation (TikTok may block your IP).
-* Ensure that the requested content is public and adheres to TikTok’s terms of service.
-
----
-
-## Legal Disclaimer
-
-This package is **unofficial** and **not affiliated with TikTok**. The primary purpose of this tool is educational, but we are not responsible for any use for other purposes. TikTok may change its platform at any time, which could break the compatibility of this tool.
-
-**By using this package, you acknowledge that:**
-
-* The use of this API is **at your own risk**, and the developer is not responsible for any damages, losses, or consequences arising from misuse.
-* This software is **not open source**.
-* The use of this tool must always comply with TikTok's **privacy policies** and **terms of service**.
+> Tests are designed to avoid crashing when TikTok changes structure or rate-limits a user.
 
 ---
 
-## Author
+## 🧱 API Reference
+
+### `getUserVideos(username: string, options?: { limit?: number }): Promise<Video[]>`
+
+* `username`: TikTok username (without `@`)
+* `options.limit`: Max number of videos to fetch (default: 10)
+
+Returns: Array of videos or empty array if user not found.
+
+---
+
+### `getUserProfile(username: string): Promise<UserProfile | null>`
+
+Returns: Profile object with fields:
+
+* `username`
+* `followersCount`
+* `followingCount`
+* `bio`
+* `profilePicture`
+
+Returns `null` if the user is not accessible.
+
+---
+
+## ⚙️ Requirements
+
+* Node.js **v18+**
+* Chromium via `playwright` (`npx playwright install chromium`)
+* Server with internet access (e.g. VPS, Docker, etc.)
+
+---
+
+## 🛠 Build & Publish
+
+### Build
+
+```bash
+npm run build
+```
+
+### Publish to NPM
+
+```bash
+npm version patch # or minor / major
+npm publish
+```
+
+> Ensure you're logged in with `npm login`.
+---
+
+## 🗣 Feedback & Support
+
+This repository serves as a **public documentation and issue tracker** for `fits-api`.
+
+Although the source code is **not open-source**, you are welcome to:
+
+- Use the [GitHub Issues](https://github.com/KinglyShade/fits-api/issues) section to:
+  - Report bugs
+  - Request features
+  - Ask usage-related questions
+
+🛑 Pull requests are **not accepted**.
+
+
+---
+
+## 🔐 Usage Notes
+
+* ❗ This SDK uses **headless Chromium** to generate TikTok’s required `_signature` values.
+* 📉 If TikTok changes their anti-bot measures, re-testing may be necessary.
+* 🧱 JS fallback (`JSDOM`) is used if Chromium fails (but is limited in capabilities).
+
+---
+
+## ⚖️ Legal Disclaimer
+
+This project is **not affiliated with TikTok**.
+
+It is intended only for:
+
+* ✅ Educational
+* ✅ Development
+* ✅ Internal analysis
+
+You agree to:
+
+* Not use this SDK to violate TikTok’s [Terms of Service](https://www.tiktok.com/legal/terms-of-service).
+* Not redistribute this SDK as open source.
+* Assume full responsibility for its use.
+
+---
+
+## 👤 Author
 
 **KinglyShade**
-🔗 [GitHub](https://github.com/kinglyfenixstudios)
-📦 [npm](https://www.npmjs.com/package/fits-api)
+[GitHub](https://github.com/kinglyfenixstudios) • [npm](https://www.npmjs.com/package/fits-api)
 
 ---
 
-## License
+## 📄 License
 
-Distributed under the **MIT License**.
-See the [LICENSE](./LICENSE) file for details.
+MIT License.
+See the [LICENSE](./LICENSE) file for full details.
+
+
